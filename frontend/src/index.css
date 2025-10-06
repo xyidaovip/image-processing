@@ -1,0 +1,128 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* 自定义样式 */
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+    monospace;
+}
+
+/* 拖拽区域动画 */
+.drag-over {
+  @apply border-blue-400 bg-blue-50;
+}
+
+/* 上传进度条动画 */
+.progress-bar {
+  transition: width 0.3s ease-in-out;
+}
+
+/* 图片预览样式 */
+.image-preview {
+  @apply max-w-full max-h-64 object-contain rounded-lg shadow-md;
+}
+
+/* 错误提示动画 */
+.error-enter {
+  opacity: 0;
+  transform: translateY(-10px);
+}
+
+.error-enter-active {
+  opacity: 1;
+  transform: translateY(0);
+  transition: opacity 300ms, transform 300ms;
+}
+
+.error-exit {
+  opacity: 1;
+}
+
+.error-exit-active {
+  opacity: 0;
+  transform: translateY(-10px);
+  transition: opacity 300ms, transform 300ms;
+}
+
+/* 淡入动画 */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fadeIn {
+  animation: fadeIn 0.4s ease-out;
+}
+
+/* 进度条闪光动画 */
+@keyframes shimmer {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+.animate-shimmer {
+  animation: shimmer 2s infinite;
+}
+
+/* 脉冲动画 */
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}
+
+.animate-pulse-slow {
+  animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+/* 旋转动画 */
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.animate-spin {
+  animation: spin 1s linear infinite;
+}
+
+/* 响应式图片容器 */
+.responsive-image-container {
+  @apply relative w-full overflow-hidden rounded-lg;
+  padding-bottom: 75%; /* 4:3 aspect ratio */
+}
+
+.responsive-image-container img {
+  @apply absolute top-0 left-0 w-full h-full object-contain;
+}
+
+/* 平滑过渡 */
+.smooth-transition {
+  @apply transition-all duration-300 ease-in-out;
+}

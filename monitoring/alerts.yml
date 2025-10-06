@@ -1,0 +1,70 @@
+# Prometheus告警规则
+groups:
+  - name: service_health
+    interval: 30s
+    rules:
+      # 服务健康检查
+      - alert: ServiceDown
+        expr: up == 0
+        for: 1m
+        labels:
+          severity: critical
+        annotations:
+          summary: "服务 {{ $labels.job }} 已停止"
+          description: "{{ $labels.job }} 在 {{ $labels.instance }} 上已停止超过1分钟"
+
+      # 高错误率
+      - alert: HighErrorRate
+        expr: rate(http_requests_total{status=~"5.."}[5m]) > 0.05
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: "高错误率检测"
+          description: "{{ $labels.job }} 的错误率超过5%"
+
+  - name: performance
+    interval: 30s
+    rules:
+      # 高响应时间
+      - alert: HighResponseTime
+        expr: histogram_quantile(0.95, rate(http_request_duration_seconds_bucket[5m])) > 5
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: "响应时间过高"
+          description: "{{ $labels.job }} 的95分位响应时间超过5秒"
+
+      # 高CPU使用率
+      - alert: HighCPUUsage
+        expr: container_cpu_usage_seconds_total > 0.8
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: "CPU使用率过高"
+          description: "容器 {{ $labels.name }} 的CPU使用率超过80%"
+
+      # 高内存使用率
+      - alert: HighMemoryUsage
+        expr: (container_memory_usage_bytes / container_spec_memory_limit_bytes) > 0.9
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: "内存使用率过高"
+          description: "容器 {{ $labels.name }} 的内存使用率超过90%"
+
+  - name: disk
+    interval: 30s
+    rules:
+      # 磁盘空间不足
+      - alert: LowDiskSpace
+        expr: (node_filesystem_avail_bytes / node_filesystem_size_bytes) < 0.1
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: "磁盘空间不足"
+          description: "磁盘 {{ $labels.device }} 的可用空间少于10%"
